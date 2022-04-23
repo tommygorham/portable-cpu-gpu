@@ -1,0 +1,13 @@
+How to run the programs and this directory for reproduciblility of Code Base.
+
+### The program below is a serial matrix-vector dot product, identical to serial.cpp.
+    Performance is measured with the chrono library ###
+serial.cpp: 
+
+
+### The program below is a serial matrix-vector dot product, identical to serial.cpp.
+    However, this time we measure performance with openmp ###
+
+    serial2.cpp: g++ -o runserial2 serial2.cpp -fopenmp
+
+  

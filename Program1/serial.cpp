@@ -10,8 +10,6 @@
 
 #include <iostream> 
 #include <chrono> /* for measuring execution time */ 
-//#include <typeinfo> 
-
 
 // FUNCTION PROTOTYPES
 // Function 1: Used to print a row major matrix  
@@ -35,16 +33,14 @@ int main(int argc, char *argv[])
     unsigned int i, j; /* for iterating */ 
     
     // size of matrix and vector for y=Ax
-    const unsigned int M = 1024; // rows
-    const unsigned int N = 1024; // cols
+    const unsigned int M = 1000; // rows
+    const unsigned int N = 1000; // cols
 
     // store size of matrix on heap, using static_cast as it is faster than dynamic_cast
     /* using double to measure signed 64-bit double-precision, a bit more precise than float (double is 8 bytes) */ 
     auto y = static_cast<double*>(std::malloc(M * sizeof(double))); 
     auto x = static_cast<double*>(std::malloc(N * sizeof(double)));
     auto A = static_cast<double*>(std::malloc(M * N * sizeof(double)));
-    
-   // std::cout << typeid(A).name() << std::endl; 
     
     // initialize vector x 
     for (i = 0; i < N; ++i ) { x[ i ] = 1; }
@@ -77,7 +73,7 @@ int main(int argc, char *argv[])
        std::chrono::duration<double, std::milli> mstime = end - start; 
        std::cout << "\nDot Product Took: " << mstime.count() << " milliseconds"; 
        std::chrono::duration<double, std::micro> microtime = end - start;
-       std::cout << "or, " << microtime.count() << " microseconds" << std::endl;  
+       std::cout << "  or, " << microtime.count() << " microseconds" << std::endl;  
        /* use the method call below with caution depending on how large M,N is */ 
        // printVector(y,M); 
        std::cout << "Computed result of " << M << " * " << N << " = "  << sum_dot_result << std::endl; 
