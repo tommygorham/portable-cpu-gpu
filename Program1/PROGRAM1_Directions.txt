@@ -1,13 +1,18 @@
 How to run the programs and this directory for reproduciblility of Code Base.
 
-### The program below is a serial matrix-vector dot product, identical to serial.cpp.
+Note: If your compiler is gcc 10 or later use: -std=c++20 or -std=c++17
+      Otherwise, if its older you can use -std=c++2a I believe 
+
+SERIAL PROGRAMS 
+
+### The program below is a serial matrix-vector dot product
     Performance is measured with the chrono library ###
-serial.cpp: 
+    serial.cpp: g++ -Wall -std=c++20 -o runserial serial.cpp
 
 
 ### The program below is a serial matrix-vector dot product, identical to serial.cpp.
     However, this time we measure performance with openmp ###
 
-    serial2.cpp: g++ -o runserial2 serial2.cpp -fopenmp
+    serial2.cpp: g++ -Wall -std=c++20 -o runserial2 serial2.cpp -fopenmp
 
-  
+KOKKOS PROGRAMS
