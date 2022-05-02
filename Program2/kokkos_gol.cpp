@@ -42,8 +42,6 @@ int main(int argc, char** argv)
 	         /* just checking execution space that I have been setting via compile-time */ 
 	        std::cout << "\nCurrent execution space: " << 
                 typeid(Kokkos::DefaultExecutionSpace).name() << "\n" << std::endl; 
-			
-                /* timer was here from 3/28/22 runs  */ 
 	
                 /* allocating memory to two grids: A and B, contiguous memory with 0's on edges to handle boundaries */ 
 		ViewMatrixType A("gridA", dim+2, dim+2);
