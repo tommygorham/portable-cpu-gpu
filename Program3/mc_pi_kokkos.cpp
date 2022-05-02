@@ -76,9 +76,10 @@ int main(int argc, char* args[]) {
 
     // Calcuate pi value for chosen sample size and generator type  
     long circHits = 0;
+    Kokkos::Timer timer; /*can use this as opposed to chrono*/  
     Kokkos::parallel_reduce ("MC-pi-estimate", darts/dart_groups, GenRandom<RandPoolType>(rand_pool, rad, dart_groups), circHits); 
-
-    printf( "darts = %ld  hits = %ld  pi est = %lf\n", darts, circHits, 4.0*double(circHits)/double(darts) );
+    double time = timer.seconds(); /*note this reports in seconds, can do time*1000 for ms*/ 
+    printf( "points created = %ld  hits = %ld  pi est = %lf\n time( %g s) ", darts, circHits, 4.0*double(circHits)/double(darts), time );
   }
     Kokkos::finalize();
 
