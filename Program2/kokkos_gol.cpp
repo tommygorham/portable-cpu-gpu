@@ -102,7 +102,7 @@ int main(int argc, char** argv)
                                }
 		        }); //end par for 
   
-          //swap grids and send back through parallel construct  
+                      //swap grids and send back through parallel construct  
                       tmp = A;
                       A = B;
                       B = tmp;	
