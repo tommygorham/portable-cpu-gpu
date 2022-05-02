@@ -2,12 +2,10 @@
                   This program uses a Monte Carlo algorithm to compute PI as an
                   example of how random number generators are used to solve problems.
                   Kokkos provides two different random number generators with a 64-bit
-                  and a 1024-bit state.
-                  
+                  and a 1024-bit state.              
    Purpose: 
                   To Compare CPU/GPU runtimes and test against pure openmp/cuda
                   implementations. 
-
 */ 
 
 #include <Kokkos_Core.hpp>
@@ -35,16 +33,9 @@ struct GenRandom {
      gen_type rgen = rand_pool.get_state();
 
      // Draw samples numbers from the pool as urand64 between 0 and rand_pool.MAX_URAND64
-     // Note there are function calls to get other type of scalars, and also to specify
-     // Ranges or get a normal distributed float.
      for ( long it = 0; it < dart_groups; ++it ) {
        Scalar x = Kokkos::rand<gen_type, Scalar>::draw(rgen);
        Scalar y = Kokkos::rand<gen_type, Scalar>::draw(rgen);
-
-     // Example - if you wish to draw from a normal distribution
-     // mean = .5, stddev = 0.125
-     //Scalar x = rgen.normal(.5,.125);
-     //Scalar y = rgen.normal(.5,.125);
 
      Scalar dSq = (x*x + y*y);
 
@@ -73,17 +64,13 @@ int main(int argc, char* args[]) {
   {
     const double rad = 1.0; // target radius (also box size)
     const long N = atoi(args[1]); // exponent used to create number of darts, 2^N
-
     const long dart_groups = argc > 2 ? atoi(args[2]) : 1 ;
-
     const long darts = std::pow(2,N);    // number of dart throws
-
-    const double pi = 3.14159265358979323846 ;
+    const double pi = 3.14159265358979323846; /*for reference*/ 
     printf( "Reference Value for pi:  %lf\n",pi);
 
-    // Create a random number generator pool (64-bit states or 1024-bit state)
-    // Both take an 64 bit unsigned integer seed to initialize a Random_XorShift generator 
-    // which is used to fill the generators of the pool.
+    // Create a random number generator pool which takes a 64 bit unsigned integer seed to initialize a Random_XorShift generator 
+    // seed is used to fill the generators of the pool.
     typedef typename Kokkos::Random_XorShift64_Pool<> RandPoolType;
     RandPoolType rand_pool(5374857);
 
