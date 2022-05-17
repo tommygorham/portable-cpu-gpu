@@ -1,5 +1,7 @@
 # Modern-CPU-GPU-programming
-Welcome! This is a wiki page and code base to support my final project artifacts towards a MS in Computer Science at the University of Tennessee at Chattanooga.These codes were developed using Kokkos Performance Portability for the purpose of being able to estalish simple single-source that are able to compile for parallelism on the CPU and/or the GPU on manycore architectures.  
+Welcome! This is a wiki page and code base to support my final project artifacts towards a MS in Computer Science at the University of Tennessee at Chattanooga. These codes were developed using C++ and the Kokkos Ecosystem for the purpose of achieving high performance in a hardware agnostic way via Kokkos parallel abstractions that can enable parallel execution on the CPU and/or the GPU in heterogenous manycore architectures. Heterogeneous parallel programming is essential for Exascale and other high-performance systems, given the realities of modern architectures. Kokkos essentially allows us to write high performance computing applications in a way such that the applications can acheive both performance and portability by compiling and optimizing for the hardware. Without it, one would normally have to rewrite applications anytime they wanted to run their code on another cluster or system with a different programming model/hardware architecture. Instead, we can write code in a way that can achieve performance across theoretically any HPC platform without the need to refactor the code. This saves time as the average HPC application is 300,000-600,000 lines of code, and also makes optimizing the memory access patterns between diverse devices like CPUs and GPUs for the best performance easier.
+
+In my experience, C++ and Kokkos present a strong case for establishing a more unified approach to writing HPC applications as modern memory architectures continue to become more and more diverse.  
 
 # Getting started 
 **All you need is a C++ Compiler and Cmake** (but its more fun if you have OpenMP and Cuda too). 
@@ -7,6 +9,9 @@ At the time of writing this, I was using:
 * gcc/10.2.0 (with OpenMP 4.5)
 * cmake/3.19.4
 * cuda/11.3
+
+on a compute cluster node with 80 logical cores and four NVIDIA GPUs.
+
 ## Build Instructions
 
 1). Start by cloning the Kokkos Repository. I like doing this in a folder like ~/installs, but if you want to be extra safe, clonde directly to $HOME via
