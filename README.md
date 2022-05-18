@@ -1,7 +1,12 @@
 # Modern-CPU-GPU-programming
-Welcome! This is a wiki page and code base to support my final project artifacts towards a MS in Computer Science at the University of Tennessee at Chattanooga. These codes were developed using C++ and the Kokkos Ecosystem for the purpose of achieving high performance in a hardware agnostic way via Kokkos parallel abstractions that can enable parallel execution on the CPU and/or the GPU in heterogenous manycore architectures. Heterogeneous parallel programming is essential for Exascale and other high-performance systems, given the realities of modern architectures. Kokkos essentially allows us to write high performance computing applications in a way such that the applications can acheive both performance and portability by compiling and optimizing for the hardware. Without it, one would normally have to rewrite applications anytime they wanted to run their code on another cluster or system with a different programming model/hardware architecture. Instead, we can write code in a way that can achieve performance across theoretically any HPC platform without the need to refactor the code. This saves time as the average HPC application is 300,000-600,000 lines of code, and also makes optimizing the memory access patterns between diverse devices like CPUs and GPUs for the best performance easier.
+Welcome! This is a wiki page and code base to support my final project artifacts towards a MS in Computer Science at the University of Tennessee at Chattanooga. These codes were developed using C++ and the [Kokkos Ecosystem](https://kokkos.org/) for the purpose of achieving high performance in a hardware agnostic way via Kokkos parallel abstractions that can enable parallel execution on the CPU and/or the GPU in heterogenous manycore architectures. 
 
-In my experience, C++ and Kokkos present a strong case for establishing a more unified approach to writing HPC applications as modern memory architectures continue to become more and more diverse.  
+# Brief Background 
+[_Heterogeneous parallel programming_](https://en.wikipedia.org/wiki/Heterogeneous_computing) is essential for [Exascale](https://en.wikipedia.org/wiki/Exascale_computing) and other high-performance systems, given the realities of modern architectures.
+
+[Kokkos](https://github.com/kokkos) essentially allows us to write high performance computing applications in a way such that the applications can acheive both performance and portability by compiling and optimizing for the hardware. Without it, one would normally have to rewrite applications anytime they wanted to run their code on another cluster or system with a different programming model/hardware architecture. Instead, we can write code in a way that can achieve performance across theoretically any HPC platform without the need to refactor the code. This saves time as the average HPC application is 300,000-600,000 lines of code, and also makes optimizing the memory access patterns between diverse devices like CPUs and GPUs for the best performance easier.
+
+In my experience, C++ and Kokkos present a strong case for establishing a more unified approach to writing HPC applications as [modern memory architectures continue to become more and more diverse.](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki/Heterogenous-Architectures#top500-comparison-november-2011---november-2021)  
 
 # Getting started 
 **All you need is a C++ Compiler and Cmake** (but its more fun if you have OpenMP and Cuda too). 
@@ -10,11 +15,11 @@ At the time of writing this, I was using:
 * cmake/3.19.4
 * cuda/11.3
 
-on a compute cluster node with 80 logical cores and four NVIDIA GPUs.
+on a [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://wiki.simcenter.utc.edu/doku.php/clusters:firefly)
 
-## Build Instructions
+# Build Instructions
 
-1). Start by cloning the Kokkos Repository. I like doing this in a folder like ~/installs, but if you want to be extra safe, clonde directly to $HOME via
+1). Start by cloning the [Kokkos Repository](https://github.com/kokkos/kokkos). I like doing this in a folder like ~/installs, but if you want to be extra safe, clonde directly to $HOME via
 
     cd ###
     git clone https://github.com/kokkos/kokkos.git
@@ -77,4 +82,6 @@ on a compute cluster node with 80 logical cores and four NVIDIA GPUs.
              ./<exename> --kokkos-num-devices=4 (if you have 4 GPUs)
              ./<exename> --kokkos-numa=2   (if you have 2 NUMA regions)
              
-Let me know your results or if you need help! tsgorham@outlook.com     
+Let me know your results or if you need help by emailing tsgorham@outlook.com 
+
+Additionally, you can view my [wiki](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki) for more detailed information 
