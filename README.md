@@ -24,7 +24,7 @@ on a compute cluster node with 80 logical cores and four NVIDIA GPUs.
 ### For Building the Serial Backend: 
     
     mkdir build && cd build 
-    cmake .. -DCMAKE_INSTALL_PREFIX=<PAth =-to-where-you-cloned-Kokkos-in-step-1> 
+    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-cloned-Kokkos-in-step-1> 
              -DCMAKE_CXX_COMPILER=<path-to-your-g++> 
              
 ### For building with OpenMP Enabled 
@@ -75,6 +75,6 @@ on a compute cluster node with 80 logical cores and four NVIDIA GPUs.
              EXPORT OMP_PROC-BIND=spread
              export OMP_PLACES=threads
              ./<exename> --kokkos-num-devices=4 (if you have 4 GPUs)
-             ./<exename> --nkokkos-numa=2   (if you have 2 NUMA regions)
+             ./<exename> --kokkos-numa=2   (if you have 2 NUMA regions)
              
 Let me know your results or if you need help! tsgorham@outlook.com     
