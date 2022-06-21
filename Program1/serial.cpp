@@ -64,8 +64,6 @@ int main(int argc, char *argv[])
     }
      
     /* for larger sizes (M, N), only check solution, print 1 integer result which should = M*N, and measure performance */  
-      else
-      {
         /* if size is not small */  
        auto start = std::chrono::high_resolution_clock::now(); 
        int sum_dot_result = performDotProduct(A, x, y, M, N); 
