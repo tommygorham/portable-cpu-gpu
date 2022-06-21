@@ -70,7 +70,7 @@ int main(int argc, char** argv)
          */ 
 
        std::cout << "\nDefault execution space: " << typeid(Kokkos::DefaultExecutionSpace).name() << "\n" << std::endl; 
-	   std::cout << "\nDefault Host execution space: " << typeid(Kokkos::DefaultHostExecutionSpace).name() << "\n" << std::endl;    
+       std::cout << "\nDefault Host execution space: " << typeid(Kokkos::DefaultHostExecutionSpace).name() << "\n" << std::endl;    
         
        /* For maximum portability, if we plan to potentially compile for the GPU (but not always), use Kokkos::create_mirror_view
         * instead of Kokkos::create_mirror. Only use create_mirror if we know we will only use this program to make use of GPU 
