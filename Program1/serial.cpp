@@ -75,7 +75,6 @@ int main(int argc, char *argv[])
        /* use the method call below with caution depending on how large M,N is */ 
        // printVector(y,M); 
        std::cout << "Computed result of " << M << " * " << N << " = "  << sum_dot_result << std::endl; 
-      }
 
 // Release dynamic memory
         std::free(A);
