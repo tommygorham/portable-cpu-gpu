@@ -11,9 +11,6 @@
 
 #include <iostream> 
 #include <omp.h>  
- 
-//#include <typeinfo> 
-
 
 // FUNCTION PROTOTYPES
 // Function 1: Used to print a row major matrix  
@@ -46,8 +43,6 @@ int main(int argc, char *argv[])
     auto y = static_cast<double*>(std::malloc(M * sizeof(double))); 
     auto x = static_cast<double*>(std::malloc(N * sizeof(double)));
     auto A = static_cast<double*>(std::malloc(M * N * sizeof(double)));
-    
-   // std::cout << typeid(A).name() << std::endl; 
     
     // initialize vector x 
     for (i = 0; i < N; ++i ) { x[ i ] = 1; }
