@@ -1,7 +1,7 @@
 # Build Directions for Using RAJA As A Library in Your C++/C Application 
 For now, these are the most basic build commands for serial compilation to get things working
 
-### Clone RAJA
+## Clone RAJA
 `git clone --recursive https://github.com/llnl/raja.git`
 
 ## Configure With CMake and Build
@@ -10,7 +10,7 @@ For now, these are the most basic build commands for serial compilation to get t
  
     cmake .. -DCMAKE_INSTALL_PREFIX=<where-you-want-to-install-raja> 
              -DCMAKE_CXX_COMPILER=g++ 
-              -DCMAKE_C_COMPILER=gcc
+             -DCMAKE_C_COMPILER=gcc
           
     make install 
 
@@ -22,8 +22,11 @@ Also, you may need to pass the paththe the compiler, as opposed to just g++/gcc.
     cd 
     cd myapp
     vim CMakeLists.txt
+    
+[Example CMakeLists.txt](https://github.com/tommygorham/portable-cpu-gpu/blob/main/RAJA/CMakeLists.txt)
 
 ## Build your application with RAJA
+
     mkdir build && cd build
     !cmake 
     make 
