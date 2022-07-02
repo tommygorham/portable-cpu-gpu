@@ -121,7 +121,7 @@ int main(int argc, char** argv)
        Kokkos::deep_copy(B, h_B); 
        Kokkos::deep_copy(C, h_C); 
              
-        //moving this here from serial and increased 10 to 20 for more correctness testing
+        // moving this here from serial and increased 10 to 20 for more correctness testing
        if(N < 20 && M < 20)
        {
          printVector(h_x); 
@@ -139,16 +139,14 @@ int main(int argc, char** argv)
         * Note: Apparently need a lot of rows to saturate NVIDIA Volta GPUs
         * 
         */ 
-       else
-       {
          std::cout << "\n\nTest1: Kokkos::ParallelReduce, Row Major Storage\n\n"; 
          double result = 0; 
          auto start = std::chrono::high_resolution_clock::now(); 
          performDotProduct(B, x, y, M, N); 
          auto end = std::chrono::high_resolution_clock::now();
          // Kokkos::fence(); 
-         //Kokkos::deep_copy(h_y, y); 
-         //printVector(h_y); 
+         // Kokkos::deep_copy(h_y, y); 
+         // printVector(h_y); 
          result = (h_y.extent(0) * N);    /*check sol */
          std::chrono::duration<double, std::milli> mstime = end - start; 
          std::cout << "\nDot Product Took: " << mstime.count() << " milliseconds"; 
@@ -157,9 +155,9 @@ int main(int argc, char** argv)
          std::cout << "Computed result of " << M << " * " << N << " = "  << result << std::endl;
          Kokkos::fence(); 
          Kokkos::deep_copy(y ,h_y); /*copy ones back to device view for next test*/ 
-        //For(i = 0; i < N; ++i) {y(i)=1;} 
+         // for(i = 0; i < N; ++i) {y(i)=1;} 
 
-		// testing 1d col major hard coded for kernel 
+         // testing 1d col major hard coded for kernel 
          std::cout << "\n\nTest2: Kokkos::ParallelReduce, Col Major Storage\n\n";
          double result2 = 0; 
          auto start2 = std::chrono::high_resolution_clock::now(); 
@@ -174,7 +172,7 @@ int main(int argc, char** argv)
          std::chrono::duration<double, std::micro> microtime2 = end2 - start2;
          std::cout << "  or, " << microtime2.count() << " microseconds" << std::endl;
          std::cout << "Computed result of " << M << " * " << N << " = "  << result2 << std::endl;
-       }   //  Kokkos::fence(); 
+         //  Kokkos::fence(); 
   }   // close kokkos scope
   Kokkos::finalize();  /*use ths to free memory */ 
   return 0; 
