@@ -1,12 +1,8 @@
 # Modern-CPU-GPU-programming
-Welcome! This is a wiki page and code base to support my final project artifacts towards a MS in Computer Science at the University of Tennessee at Chattanooga. These codes were developed using C++ and the [Kokkos Ecosystem](https://kokkos.org/) for the purpose of achieving high performance in a hardware agnostic way via Kokkos parallel abstractions that can enable parallel execution on the CPU and/or the GPU in heterogenous manycore architectures. 
+Welcome! This is a wiki page and code base to support my final project artifacts towards a MS in Computer Science at the University of Tennessee at Chattanooga. These codes were developed using C++ and the [Kokkos Ecosystem](https://kokkos.org/) for the purpose of achieving high performance in a hardware agnostic way. This is achieved by expressing the code that you want to execute in parallel with [Kokkos parallel abstractions](https://kokkos.github.io/kokkos-core-wiki/API/core/ParallelDispatch.html). Writing code with these abstractions enables parallel execution on the CPU and/or the GPU in heterogenous manycore architectures. The execution target (e.g., CPU/GPU) is set at compile time via one or multiple of [these parameters](https://kokkos.github.io/kokkos-core-wiki/keywords.html), along with other optimizations, depending on the architecture. 
 
 # Brief Background 
-[_Heterogeneous parallel programming_](https://en.wikipedia.org/wiki/Heterogeneous_computing) is essential for [Exascale](https://en.wikipedia.org/wiki/Exascale_computing) and other high-performance systems, given the realities of modern architectures.
-
-[Kokkos](https://github.com/kokkos) essentially allows us to write high performance computing applications in a way such that the applications can acheive both performance and portability by compiling and optimizing for the hardware. Without it, one would normally have to rewrite applications anytime they wanted to run their code on another cluster or system with a different programming model/hardware architecture. Instead, we can write code in a way that can achieve performance across theoretically any HPC platform without the need to refactor the code. This saves time as the average HPC application is 300,000-600,000 lines of code, and also makes optimizing the memory access patterns between diverse devices like CPUs and GPUs for the best performance easier.
-
-In my experience, C++ and Kokkos present a strong case for establishing a more unified approach to writing HPC applications as [modern memory architectures continue to become more and more diverse.](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki/Heterogenous-Architectures#top500-comparison-november-2011---november-2021)  
+[_Heterogeneous parallel programming_](https://en.wikipedia.org/wiki/Heterogeneous_computing) is essential for [Exascale](https://en.wikipedia.org/wiki/Exascale_computing) and other high-performance systems, given the realities of modern architectures. [Kokkos](https://github.com/kokkos) is a C++ Performance Portability Framework that provides a more unified approach to writing HPC applications. As [modern memory architectures continue to become more and more diverse](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki/Heterogenous-Architectures#top500-comparison-november-2011---november-2021), we can use portability Frameworks like Kokkos to write high performance computing applications in a way such that the applications can acheive both performance and portability by compiling and optimizing for the hardware. Without Kokkos, one would normally have to rewrite applications anytime they wanted to run their code on another cluster or system with a different programming model/hardware architecture. Instead, we can write code in a way that can achieve performance across theoretically any HPC platform without the need to refactor the code. This saves alot of time, as the average HPC application is 300,000-600,000 lines of code. Using Kokkos also makes optimizing the memory access patterns between diverse devices like CPUs and GPUs easier, since the optimizations can be set at compile time. 
 
 # Getting started 
 **All you need is a C++ Compiler and Cmake** (but its more fun if you have OpenMP and Cuda too). 
@@ -15,7 +11,7 @@ At the time of writing this, I was using:
 * cmake/3.19.4
 * cuda/11.3
 
-on a [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://wiki.simcenter.utc.edu/doku.php/clusters:firefly)
+The code was executed on a [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://wiki.simcenter.utc.edu/doku.php/clusters:firefly)
 
 # Build Instructions
 
@@ -29,23 +25,23 @@ on a [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://
 ### For Building the Serial Backend: 
     
     mkdir build && cd build 
-    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-cloned-Kokkos-in-step-1> 
+    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-want-to-install-kokkos> 
              -DCMAKE_CXX_COMPILER=<path-to-your-g++> 
              
 ### For building with OpenMP Enabled 
     
-    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-cloned-Kokkos-in-step-1>
+    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-want-to-install-kokkos>
              -DCMAKE_CXX_COMPILER=<path-to-your-g++>
              -DKokkos_ENABLE_OPENMP=ON 
               
 ### For building with CUDA Enabled  
              
-    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-cloned-Kokkos-in-step-1> 
+    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-want-to-install-kokkos> 
              -DCMAKE_CXX_COMPILER=kokkos/bin/nvcc_wrapper 
              -DKokkos_ENABLE_CUDA=ON 
                       
 ### Recommended build with advanced optimizations: Here I'm optimizing for NVIDIA VOLTA 
-    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-cloned-Kokkos-in-step-1>
+    cmake .. -DCMAKE_INSTALL_PREFIX=<path-to-where-you-want-to-install-kokkos>
              -DKokkos_ENABLE_CUDA_LAMBDA=ON 
              -DKokkos_ENABLE_CUDA=ON
              -DKokkos_ENABLE_CUDAUVM=ON
@@ -70,6 +66,8 @@ on a [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://
              !cmake 
              make 
          
+Note: *!cmake* ensures you build your program with the same Cmake arguments that you built the Kokkos library with. 
+
 6) Run the Exe the CMakeLists.txt to make to build.  
          
             ./<exename>    
@@ -82,6 +80,4 @@ on a [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://
              ./<exename> --kokkos-num-devices=4 (if you have 4 GPUs)
              ./<exename> --kokkos-numa=2   (if you have 2 NUMA regions)
              
-Let me know your results or if you need help by emailing tsgorham@outlook.com 
-
 Additionally, you can view my [wiki](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki) for more detailed information 
