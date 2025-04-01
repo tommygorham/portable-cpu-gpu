@@ -6,10 +6,8 @@ As [modern memory architectures continue to become more
 diverse](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki/Heterogenous-Architectures#top500-comparison-november-2011---november-2021),
 it may be useful to implement code in a more portable way such that it can achieve performance on theoretically any HPC platform,
 instead of specific APIs for each specific architecture (Nvidia/Cuda, AMD/HIP, Intel/SYCL)   
-
-One way this is achieved by expressing the code that CAN be executed in parallel with [Kokkos parallel
+One way this is achieved is by expressing any code that can potentially be executed in parallel for speedup with [Kokkos parallel
 abstractions](https://kokkos.github.io/kokkos-core-wiki/API/core/ParallelDispatch.html). 
-
 This way, parallel execution and memory access patterns can be configured at compile time, without the code having to
 change.
 
@@ -25,10 +23,12 @@ At the time of writing this, I was using:
 * [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://wiki.simcenter.utc.edu/doku.php/clusters:firefly)
 
 # Instructions
+First, [install Kokkos](https://kokkos.org/kokkos-core-wiki/get-started/building-from-source.html#configuring-and-building-kokkos)
 
-[Install Kokkos](https://kokkos.org/kokkos-core-wiki/get-started/building-from-source.html#configuring-and-building-kokkos)
+Then, build these codes based on your architecture using one of the example configurations below (Serial CPU, OpenMP,
+OpenMP + NVIDIA GPUs, etc)
 
-To Tell CMake where you installed Kokkos with 
+To Tell CMake where you installed Kokkos 
 ```
 cmake .. -DKokkos_ROOT=<path-to-your-kokkos-install>
 ```
