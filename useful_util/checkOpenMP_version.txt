@@ -1,2 +1,0 @@
-#command to check openmp version if needed, confirmed to work on AlmaLinux 
-echo |cpp -fopenmp -dM |grep -i open
