@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
         int size, world_rank, row_rank, col_rank; /* for mpi */
         double start_init, end_init, final_init, start_yAx, end_yAx,
                yAx_time_to_sol, start_redistribute, end_redistribute,
-                redistribute_time;
+               redistribute_time;
         const int M = atoi(argv[1]); /* global rows  */
         const int N = atoi(argv[2]); /* global cols  */
         const int P = atoi(argv[3]); /* process rows */

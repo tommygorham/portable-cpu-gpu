@@ -89,4 +89,19 @@ export OMP_PLACES=threads
 ./<exename> --kokkos-numa=2   (if you have 2 NUMA regions)
 ```
 
+## Additional Performance Analysis: Using Kokkos Profiling tools 
+[Install Kokkos Tools](https://github.com/kokkos/kokkos-tools)
+```
+export KOKKOS_PROFILE_LIBRARY=/home/tgorham/git-repos/kokkos-tools/profiling/simple-kernel-timer/kp_kernel_timer.so
+# run executable which will produce a .dat file
+# use kp_reader to read .dat file, for example., 
+~/kokkos-tools/profiling/simple-kernel-timer/kp_reader node02_result.dat
+# would give us something like 
+Total Execution Time (incl. Kokkos + non-Kokkos)
+Total Time in Kokkos kernels (parallel_reduce GPUs)
+   -> Time outside Kokkos kernels (SerialHost Code)
+   -> Percentage in Kokkos kernels
+Total Calls to Kokkos Kernels
+```
+
 [Additional info](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki) 
