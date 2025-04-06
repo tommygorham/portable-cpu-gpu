@@ -14,12 +14,13 @@ change.
 # Getting started 
 **Requirements:** C++ Compiler, CMake, Kokkos
 
-**Optional:** OpenMP, Nvidia/AMD/Intel GPU Cluster or Machine 
+**Optional:** OpenMP, MPI (for Hybrid Parallel Programming), and/or GPU machine (Nvidia/AMD/Intel) 
 
 At the time of writing this, I was using: 
 * gcc/10.2.0 (with OpenMP 4.5)
 * cmake/3.19.4
 * cuda/11.3
+* openmpi/4.1.0
 * [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://wiki.simcenter.utc.edu/doku.php/clusters:firefly)
 
 # Instructions
@@ -59,10 +60,24 @@ cmake ..
 -DCMAKE_CXX_COMPILER=<path-to-kokkos/bin/nvcc_wrapper> 
 -DKokkos_ENABLE_OPENMP=ON 
 -DKokkos_ENABLE_CUDA=ON
--DKokkos_ARCH_<YOUR_GPU_ARCHITECTURE>=ON 
+# Optional 
+-DKokkos_ARCH_<YOUR_GPU_ARCHITECTURE>=ON # e.g., VOLTA70
 -DKokkos_ENABLE_CUDA_LAMBDA=ON
 -DKokkos_ENABLE_CUDA_UVM=ON
 -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON 
+```
+## Hybrid MPI + GPU
+```
+cmake .. 
+-DCMAKE_INSTALL_PREFIX=<Kokkos-Install-Path> 
+-DCMAKE_CXX_COMPILER=<Kokkos-Repository-Path>/bin/nvcc_wrapper 
+-DKokkos_ENABLE_CUDA=ON 
+-DKokkos_ENABLE_MPI=ON
+# Optional 
+
+--------------Running for MPI+Kokkos+GPUs--------------
+mpirun -np <mpi-processes> ./new.cu <global rows> <global cols> <process rows> <process cols>
+For Example: mpirun -np 4 ./new.cu 500 500 200 200
 ```
 
 ## Additional Configuration 
