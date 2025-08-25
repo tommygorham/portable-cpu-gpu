@@ -1,107 +1,53 @@
 # Modern-CPU-GPU-programming
-These codes were developed using C++ and the [Kokkos Ecosystem](https://kokkos.org/) for the purpose 
-of learning, experimenting with, and benchmarking performance portability frameworks in high-performance computing. 
+A collection of codes, insights, and performance portability framework experiments for cpu + gpu programming 
 
-As [modern memory architectures continue to become more
-diverse](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki/Heterogenous-Architectures#top500-comparison-november-2011---november-2021),
-it may be useful to implement code in a more portable way such that it can achieve performance on theoretically any HPC platform,
-instead of specific APIs for each specific architecture (Nvidia/Cuda, AMD/HIP, Intel/SYCL)   
-One way this is achieved is by expressing any code that can potentially be executed in parallel for speedup with [Kokkos parallel
-abstractions](https://kokkos.github.io/kokkos-core-wiki/API/core/ParallelDispatch.html). 
-This way, parallel execution and memory access patterns can be configured at compile time, without the code having to
-change.
+## Directory structure
+`kokkos`: C++ codes using a performance portability framework for CPU+GPU parallel execution
 
-# Getting started 
-**Requirements:** C++ Compiler, CMake, Kokkos
+# Context 
+### THE CPU (Central Processing Unit) 
+E.g., AMD Ryzen 9 7950X **(16 physical cores, 32 logical cores)**
+* **What:** Used for sequential tasks & complex decision-making
+* **How:** Fewer, more powerful cores focused on complex tasks (e.g., if -> then) 
+* **Why:** It's like the brain of the computer, orchestrating what happens when
+* Advanced Control Logic, optimized for low latency 
+* Big caches (L1, L2, L3), some processors may share L2   
 
-**Optional:** OpenMP, MPI (for Hybrid Parallel Programming), and/or GPU machine (Nvidia/AMD/Intel) 
+### CPU Optimizations 
+* Keep variables close to cache, as this is much faster to access than main memory
+(E.g., padding the array to cache line)
+* Access matrices row-major order, and keep abstraction to 1D (i*N+j) 
+* Advanced Vector Instructions/Compiler Intrinsics (SSE, AVX2, -O2, SMT, etc..)
+* OpenMP shared memory parallelism, cyclic distribution
+* MPI for distributed memory parallelism, data communication
+* [My favorite resource:](https://people.freebsd.org/~lstewart/articles/cpumemory.pdf) 
 
-At the time of writing this, I was using: 
-* gcc/10.2.0 (with OpenMP 4.5)
-* cmake/3.19.4
-* cuda/11.3
-* openmpi/4.1.0
-* [compute cluster node with 80 logical cores and four NVIDIA GPUs.](https://wiki.simcenter.utc.edu/doku.php/clusters:firefly)
+### THE GPU (Graphics Processing Unit)  
+E.g., NVIDIA RTX 4090 **(16,384 cores)** 
+* **What:** Used for graphics rendering images & machine learning
+* **How:** Thousands of simple cores optimized for parallel processing
+* **Why:** Having many more cores than the CPU make the GPU much faster at large-scale, simple calculations
+* SIMT, data parallelism: Groups of GPU cores perform exact same operations at the exact same time 
+* Advantages over the CPU include high throughput and high memory bandwith 
 
-# Instructions
-First, [install Kokkos](https://kokkos.org/kokkos-core-wiki/get-started/building-from-source.html#configuring-and-building-kokkos)
+``` c++/cuda code
+// cuda kernel launch <<< num_blocks, num_threads_per_block >>> 
+computeOnGPU <<< 50, 1024 >>>
+// 50 * 1024 = 51,200 logical threads ... You can't launch 51,200 threads on a CPU 
+```
+* **CUDA Threads:** logical threads created by the GPU when you launch a kernel. Each thread executes a portion of the code on the GPU.
+* **CUDA Blocks:** groups of threads. Threads within a block can communicate with each other and share resources, but blocks are independent and cannot communicate with each other.
+The number of blocks and threads per block you define determines how the work is divided among the GPU’s cores.
 
-Then, build these codes based on your architecture using one of the example configurations below (Serial CPU, OpenMP,
-OpenMP + NVIDIA GPUs, etc)
+### GPU Optimizations 
+* Coalesce memory access to minimize the time the program spends in memory access 
+* Fully saturate all the GPU cores if possible 
+* Note: The GPU cores are not directly mapped to threads one-to-one. Instead, CUDA organizes threads into warps (groups of 32
+threads) and schedules them across available cores.
+* Number of threads per block that's a multiple of 32.
+* Aim to have enough blocks to cover all the GPU cores.
+(i.e., numblocks * numthreadsperblock = cuda cores)  
+* Profiling tools: nvidia-smi, rocm-smi, nvprof, nvidia nsight [this
+* calculator](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fdocs.nvidia.com%2Fcuda%2Fcuda-occupancy-calculator%2FCUDA_Occupancy_Calculator.xls&wdOrigin=BROWSELINK)
 
-To Tell CMake where you installed Kokkos 
-```
-cmake .. -DKokkos_ROOT=<path-to-your-kokkos-install>
-```
-Or
-```
--DCMAKE_INSTALL_PREFIX=<path-to-your-kokkos-install>
-```
-
-## Serial CPU   
-```
-cmake .. 
--DCMAKE_INSTALL_PREFIX=<path-to-your-kokkos-install>
--DCMAKE_CXX_COMPILER=<path-to-g++> 
-```
-
-## OpenMP for on-node shared memory parallelism on the CPU
-```
-cmake .. 
--DCMAKE_INSTALL_PREFIX=<path-to-your-kokkos-install>
--DCMAKE_CXX_COMPILER=<path-to-g++> 
--DKokkos_ENABLE_OPENMP=ON 
-```
-
-## OpenMP + NVIDIA GPU(s) 
-```
-cmake .. 
--DCMAKE_INSTALL_PREFIX=<path-to-your-kokkos-install>
--DCMAKE_CXX_COMPILER=<path-to-kokkos/bin/nvcc_wrapper> 
--DKokkos_ENABLE_OPENMP=ON 
--DKokkos_ENABLE_CUDA=ON
-# Optional 
--DKokkos_ARCH_<YOUR_GPU_ARCHITECTURE>=ON # e.g., VOLTA70
--DKokkos_ENABLE_CUDA_LAMBDA=ON
--DKokkos_ENABLE_CUDA_UVM=ON
--DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON 
-```
-## Hybrid MPI + GPU
-```
-cmake .. 
--DCMAKE_INSTALL_PREFIX=<Kokkos-Install-Path> 
--DCMAKE_CXX_COMPILER=<Kokkos-Repository-Path>/bin/nvcc_wrapper 
--DKokkos_ENABLE_CUDA=ON 
--DKokkos_ENABLE_MPI=ON
-# Optional 
-
---------------Running for MPI+Kokkos+GPUs--------------
-mpirun -np <mpi-processes> ./new.cu <global rows> <global cols> <process rows> <process cols>
-For Example: mpirun -np 4 ./new.cu 500 500 200 200
-```
-
-## Additional Configuration 
-```
-export OMP_NUM_THREADS=<#> 
-EXPORT OMP_PROC-BIND=spread
-export OMP_PLACES=threads
-./<exename> --kokkos-num-devices=4 (if you have 4 GPUs)
-./<exename> --kokkos-numa=2   (if you have 2 NUMA regions)
-```
-
-## Additional Performance Analysis: Using Kokkos Profiling tools 
-[Install Kokkos Tools](https://github.com/kokkos/kokkos-tools)
-```
-export KOKKOS_PROFILE_LIBRARY=/home/tgorham/git-repos/kokkos-tools/profiling/simple-kernel-timer/kp_kernel_timer.so
-# run executable which will produce a .dat file
-# use kp_reader to read .dat file, for example., 
-~/kokkos-tools/profiling/simple-kernel-timer/kp_reader node02_result.dat
-# would give us something like 
-Total Execution Time (incl. Kokkos + non-Kokkos)
-Total Time in Kokkos kernels (parallel_reduce GPUs)
-   -> Time outside Kokkos kernels (SerialHost Code)
-   -> Percentage in Kokkos kernels
-Total Calls to Kokkos Kernels
-```
-
-[Additional info](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki) 
+[Wiki](https://github.com/tommygorham/modern-cpu-gpu-programming/wiki) 
