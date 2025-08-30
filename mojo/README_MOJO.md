@@ -1,3 +1,3 @@
 # MOJO 
 
-Directory for testing mojo language and other python ai frameworks across different systems
+Directory for testing mojo language for python-like cpu-gpu programming

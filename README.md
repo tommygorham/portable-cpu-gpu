@@ -2,7 +2,11 @@
 A collection of codes, insights, and performance portability framework experiments for cpu + gpu programming 
 
 ## Directory structure
-`kokkos`: C++ codes using a performance portability framework for CPU+GPU parallel execution
+`kokkos`: C++ codes using a performance portability framework for Hybtid CPU+GPU parallel execution (OpenMP + MPI +
+Cuda) 
+`mojo:` Python CPU GPU framework perhaps?
+`nvidia-cuda:` Codes for Nvidia machines
+`rocm-hip:` Codes for AMD machines 
 
 # Context 
 ### THE CPU (Central Processing Unit) 
@@ -14,6 +18,7 @@ E.g., AMD Ryzen 9 7950X **(16 physical cores, 32 logical cores)**
 * Big caches (L1, L2, L3), some processors may share L2   
 
 ### CPU Optimizations 
+* SIMD 
 * Keep variables close to cache, as this is much faster to access than main memory
 (E.g., padding the array to cache line)
 * Access matrices row-major order, and keep abstraction to 1D (i*N+j) 
@@ -40,6 +45,7 @@ computeOnGPU <<< 50, 1024 >>>
 The number of blocks and threads per block you define determines how the work is divided among the GPU’s cores.
 
 ### GPU Optimizations 
+* SIMT 
 * Coalesce memory access to minimize the time the program spends in memory access 
 * Fully saturate all the GPU cores if possible 
 * Note: The GPU cores are not directly mapped to threads one-to-one. Instead, CUDA organizes threads into warps (groups of 32
